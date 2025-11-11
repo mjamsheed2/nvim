@@ -218,10 +218,10 @@ return {
                     local telescope_builtin = require('telescope.builtin')
                     
                     -- Navigation with Telescope (better UI)
-                    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = ev.buf, desc = 'Go to declaration' })
-                    vim.keymap.set('n', 'gd', telescope_builtin.lsp_definitions, { buffer = ev.buf, desc = 'Go to definition' })
-                    vim.keymap.set('n', 'gr', telescope_builtin.lsp_references, { buffer = ev.buf, desc = 'Go to references' })
-                    vim.keymap.set('n', 'gi', telescope_builtin.lsp_implementations, { buffer = ev.buf, desc = 'Go to implementation' })
+                    vim.keymap.set('n', '<leader>gD', vim.lsp.buf.declaration, { buffer = ev.buf, desc = 'Go to declaration', noremap = true })
+                    vim.keymap.set('n', '<leader>gd', telescope_builtin.lsp_definitions, { buffer = ev.buf, desc = 'Go to definition', noremap = true })
+                    vim.keymap.set('n', '<leader>gr', telescope_builtin.lsp_references, { buffer = ev.buf, desc = 'Go to references', noremap = true })
+                    vim.keymap.set('n', '<leader>gi', telescope_builtin.lsp_implementations, { buffer = ev.buf, desc = 'Go to implementation', noremap = true })
                     
                     -- Information
                     vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = ev.buf, desc = 'Show documentation' })
