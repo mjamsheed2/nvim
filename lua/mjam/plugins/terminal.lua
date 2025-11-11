@@ -2,18 +2,25 @@ return {
     'akinsho/toggleterm.nvim',
     version = "*",
     config = function()
-        local powershell_options = {
-            shell       = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell",
-            shellcmdflag= "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
-            shellredir  = "-RedirectStandardOutput %s -NoNewWindow -Wait",
-            shellpipe   = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
-            shellquote  = "",
-            shellxquote = "",
-        }
+        -- Detect OS
+        local is_windows = vim.fn.has('win32') == 1 or vim.fn.has('win64') == 1
+        
+        -- Only configure PowerShell on Windows
+        if is_windows then
+            local powershell_options = {
+                shell       = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell",
+                shellcmdflag= "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+                shellredir  = "-RedirectStandardOutput %s -NoNewWindow -Wait",
+                shellpipe   = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
+                shellquote  = "",
+                shellxquote = "",
+            }
 
-        for option, value in pairs(powershell_options) do
-            vim.opt[option] = value
+            for option, value in pairs(powershell_options) do
+                vim.opt[option] = value
+            end
         end
+        -- On Linux, use default shell (usually bash or zsh)
         require("toggleterm").setup({
             size = function(term)
                 if term.direction == "horizontal" then
