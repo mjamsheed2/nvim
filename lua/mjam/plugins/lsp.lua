@@ -15,6 +15,7 @@ return {
                     "pyright",   -- Python
                     "gopls",     -- Go
                     "clangd",    -- C/C++
+                    "verible",   -- SystemVerilog (Google's Verible)
                 },
                 automatic_installation = true,
             })
@@ -144,11 +145,10 @@ return {
         },
         config = function()
             -- Setup language servers
-            local lspconfig = require('lspconfig')
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
             
             -- Lua
-            lspconfig.lua_ls.setup({
+            vim.lsp.config('lua_ls', {
                 capabilities = capabilities,
                 settings = {
                     Lua = {
@@ -158,14 +158,16 @@ return {
                     }
                 }
             })
+            vim.lsp.enable('lua_ls')
 
             -- Python
-            lspconfig.pyright.setup({
+            vim.lsp.config('pyright', {
                 capabilities = capabilities,
             })
+            vim.lsp.enable('pyright')
 
             -- Go
-            lspconfig.gopls.setup({
+            vim.lsp.config('gopls', {
                 capabilities = capabilities,
                 settings = {
                     gopls = {
@@ -177,9 +179,10 @@ return {
                     },
                 },
             })
+            vim.lsp.enable('gopls')
 
             -- C/C++
-            lspconfig.clangd.setup({
+            vim.lsp.config('clangd', {
                 capabilities = capabilities,
                 cmd = {
                     "clangd",
@@ -189,6 +192,17 @@ return {
                     "--header-insertion=iwyu",
                 },
             })
+            vim.lsp.enable('clangd')
+
+            -- SystemVerilog (Verible)
+            vim.lsp.config('verible', {
+                capabilities = capabilities,
+                filetypes = { 'verilog', 'systemverilog' },
+                root_dir = function(fname)
+                    return require('lspconfig.util').find_git_ancestor(fname) or vim.fn.getcwd()
+                end,
+            })
+            vim.lsp.enable('verible')
 
             -- Diagnostic keymaps
             vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, { desc = 'Show diagnostic error messages' })
